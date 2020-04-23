@@ -1,7 +1,7 @@
 <?php
 
 /**
- * staticMapLite 0.3.1
+ * staticMapLite 0.3.2
  *
  * Copyright 2009 Gerhard Koch
  *
@@ -30,6 +30,8 @@ ini_set('display_errors', 'off');
 
 Class staticMapLite
 {
+
+    protected $userAgent;
 
     protected $maxWidth = 1024;
     protected $maxHeight = 1024;
@@ -90,6 +92,7 @@ Class staticMapLite
 
     public function __construct()
     {
+        $this->userAgent = 'staticmaplite/0.3.2 ('.$_SERVER['SCRIPT_URI'].')';
         $this->zoom = 0;
         $this->lat = 0;
         $this->lon = 0;
@@ -337,7 +340,7 @@ Class staticMapLite
         if ($this->useTileCache && ($cached = $this->checkTileCache($url))) return $cached;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0");
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($ch, CURLOPT_URL, $url);
         $tile = curl_exec($ch);
         curl_close($ch);
