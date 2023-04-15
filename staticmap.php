@@ -30,5 +30,5 @@ ini_set('display_errors', 'off');
 
 require_once 'src/StaticMapLite.php';
 
-$map = new \Bame\StaticMap\StaticMapLite();
+$map = new \Bame\StaticMap\StaticMapLite($_SERVER['SCRIPT_URI']);
 print $map->showMap();

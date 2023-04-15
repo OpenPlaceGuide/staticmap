@@ -89,9 +89,9 @@ class StaticMapLite
     protected $zoom, $lat, $lon, $width, $height, $markers, $image, $maptype;
     protected $centerX, $centerY, $offsetX, $offsetY;
 
-    public function __construct()
+    public function __construct($scriptUri = '')
     {
-        $this->userAgent = 'staticmaplite/0.3.2 ('.$_SERVER['SCRIPT_URI'].')';
+        $this->userAgent = 'staticmaplite/0.3.2 ('.$scriptUri ?? ''.')';
         $this->zoom = 0;
         $this->lat = 0;
         $this->lon = 0;
