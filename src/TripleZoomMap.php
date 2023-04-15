@@ -12,9 +12,10 @@ class TripleZoomMap
 
     protected array $zoom = [10, 13, 16];
 
-    public function __construct($lat, $lon, $totalWidth, $totalHeight, $text, $colors, $applicationName)
+    public function __construct($lat, $lon, $totalWidth, $totalHeight, $text, $colors, $tileSource, $applicationName)
     {
         $this->applicationName = $applicationName;
+        $this->tileSource = $tileSource;
 
         $this->widthSmall = round($totalWidth / 3);
         $this->heightSmall = round($totalHeight / 2);
@@ -32,7 +33,7 @@ class TripleZoomMap
     protected function getMap($lat, $lon, $zoom, $width, $height)
     {
         $map = new StaticMap($this->applicationName);
-        $map->setCustomTileSrc('https://a.africa.tiles.openplaceguide.org/styles/bright/{Z}/{X}/{Y}.png');
+        $map->setCustomTileSrc($this->tileSource);
         $map->disableMapCache();
 // don't disable if using 3rd party tiles!
 //        $map->disableTileCache();
