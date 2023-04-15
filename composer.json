@@ -1,7 +1,7 @@
 {
-    "name": "dfacts/staticmaplite",
+    "name": "bame/staticmap",
     "type": "library",
-    "description": "A library to build static map images based on openstreetmap.",
+    "description": "A library to build static map images based on OpenStreetMap.",
     "autoload": {
         "psr-4": {
             "Bame\\StaticMap\\": "src/"
