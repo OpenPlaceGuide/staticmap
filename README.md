@@ -11,6 +11,12 @@ Some information can be found here: [https://wiki.openstreetmap.org/wiki/StaticM
 staticMapLite was only slightly modified to be reusable, it should be mostly backwards compatible and the staticmap.php
 script uses this class to provide the same functionality
 
+## Installation
+
+```bash
+composer require bame/staticmap
+```
+
 ## Additional features
 
 ### StaticMap

@@ -1,6 +1,7 @@
 {
     "name": "bame/staticmap",
     "type": "library",
+    "license": "Apache-2.0",
     "description": "A library to build static map images based on OpenStreetMap.",
     "autoload": {
         "psr-4": {
