@@ -12,7 +12,7 @@ class TripleZoomMap
 
     protected array $zoom = [10, 13, 16];
 
-    public function __construct($lat, $lon, $totalWidth, $totalHeight, $text, $colors, $tileSource, $applicationName)
+    public function __construct($lat, $lon, $totalWidth, $totalHeight, $colors, $tileSource, $applicationName)
     {
         $this->applicationName = $applicationName;
         $this->tileSource = $tileSource;
@@ -47,6 +47,13 @@ class TripleZoomMap
         $this->overview->sendHeader();
     }
 
+    public function addSignPost($text, $markerFile, $fontFile)
+    {
+        $this->text = $text;
+        $this->markerFile = $markerFile;
+        $this->fontFile = $fontFile;
+    }
+
     public function getImage()
     {
         $image = imagecreatetruecolor($this->widthSmall * 3, $this->heightSmall * 2);
@@ -64,6 +71,10 @@ class TripleZoomMap
         $this->addCenteredRectangle($closerImage, $this->widthSmall / $divisor, $this->heightSmall / $divisor, $this->colors[2]);
 
         $this->addFrame($detailImage, $this->colors[2]);
+
+        if (!empty($this->text)) {
+            $this->renderSignPost($detailImage);
+        }
 
         imagecopy($image, $overviewImage, 0, 0, 0, 0, $this->widthSmall, $this->heightSmall);
         imagecopy($image, $closerImage, 0, $this->heightSmall, 0, 0, $this->widthSmall, $this->heightSmall);
@@ -101,6 +112,62 @@ class TripleZoomMap
         $sx = imagesx($image);
         $sy = imagesy($image);
         imagerectangle($image, ($sx - $width) / 2, ($sy - $height) / 2, ($sx - $width) / 2 + $width, ($sy - $height) / 2 + $height, $this->getColor($image, $color));
+    }
+
+    protected function renderSignPost($image)
+    {
+        $text = $this->text;
+
+        $px = imagesx($image) / 2;
+        $py = imagesy($image) / 2;
+
+        imagealphablending($image, true);
+
+        $fontsize = 9;
+        $marker = imagecreatefrompng($this->markerFile);
+        imagealphablending($marker, true);
+
+        $bbox = imagettfbbox($fontsize, 0, $this->fontFile, $text);
+
+        $textwidth = $bbox[2] - $bbox[0];
+        $textheight = $bbox[7] - $bbox[1];
+
+        // top left coordinate of the marker
+        $mh = imagesy($marker);
+        $half = ceil($textwidth / 2);
+        $mx = $px - $half;
+        $my = $py - $mh;
+
+        // left
+        $a = 0;
+        $b = 4;
+        imagecopy($image, $marker, $px - 3 - $half - 9, $my, $a, 0, 10, $mh);
+
+        // from middle to left
+        for ($i = 0; $i <= $half + 2; $i++) {
+            $a = 9;
+            imagecopy($image, $marker, $px - $i, $my, $a, 0, 1, $mh);
+        }
+
+        // center
+        $centerWidth = 30;
+        $offsetCenter = 31;
+        imagecopy($image, $marker, $px - $centerWidth / 2, $py - $mh + $offsetCenter, 10, $offsetCenter, $centerWidth, $mh - $offsetCenter);
+
+        // from middle to right
+        for ($i = 0; $i <= $half + 2; $i++) {
+            $a = 35;
+            imagecopy($image, $marker, $px + $i, $my, $a, 0, 1, $mh);
+        }
+
+        // right
+        $a = imagesx($marker) - 10;
+        imagecopy($image, $marker, $px + 3 + $half, $my, $a, 0, 10, $mh);
+
+
+        $black = imagecolorallocate($image, 255, 255, 255);
+        imagettftext($image, $fontsize, 0, $mx + 1, $my + 20, $black, $this->fontFile, $text );
+
     }
 
 }
