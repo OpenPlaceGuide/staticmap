@@ -35,8 +35,8 @@ class TripleZoomMap
         $map = new StaticMap($this->applicationName);
         $map->setCustomTileSrc($this->tileSource);
         $map->disableMapCache();
-// don't disable if using 3rd party tiles!
-//        $map->disableTileCache();
+// don't disable if using 3rd party tiles! see #1
+        $map->disableTileCache();
         $map->setParams($lat, $lon, $zoom, $width, $height,);
 
         return $map;
